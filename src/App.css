@@ -5,38 +5,93 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+body {
+  background: linear-gradient(135deg, #1a0933 0%, #2d1b4e 50%, #4c1d95 100%);
+  min-height: 100vh;
+  margin: 0;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.App {
+  width: 100%;
+}
+
+.appTitle {
+  margin: 0 0 2rem 0;
+  text-align: center;
+
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 20px;
+}
+
+.titleText {
+  font-family: "SF Mono", "Monaco", "Cascadia Code", "Roboto Mono", monospace;
+  font-size: 2rem;
+  font-weight: 700;
+
+  /* Modern smooth typing animation */
+  display: inline-block;
+  overflow: hidden;
+  border-right: 2px solid #e879f9;
+  white-space: nowrap;
+
+  /* Smoother animations */
+  animation: smoothTyping 3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+
+  /* Start with no width */
+  width: 0;
+
+  filter: drop-shadow(0 0 20px rgba(183, 148, 246, 0.3));
+
+  /* Gradient text background */
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #e879f9 25%,
+    #c084fc 50%,
+    #8b5cf6 75%,
+    #7c3aed 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes smoothTyping {
+  0% {
+    width: 0;
+    opacity: 0.8;
   }
-  to {
-    transform: rotate(360deg);
+  10% {
+    opacity: 1;
+  }
+  100% {
+    width: 8ch; /* "Jammming" is 8 characters */
+    opacity: 1;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+.appContent {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+  align-items: flex-start;
+}
+
+@media (max-width: 768px) {
+  .appContent {
+    flex-direction: column;
+    gap: 1rem;
   }
 }
 
-.card {
-  padding: 2em;
-}
+@media (max-width: 768px) {
+  #root {
+    padding: 1rem;
+  }
 
-.read-the-docs {
-  color: #888;
+  .appContent {
+    flex-direction: column;
+    gap: 1rem;
+  }
 }

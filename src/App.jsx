@@ -1,35 +1,80 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import SearchResults from "./components/SearchResults";
+import Playlist from "./components/Playlist";
+import mockTracks from "./utilis/mock-data";
+import "./App.css";
+import SearchBar from "./components/SearchBar";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [searchResults, setSearchResults] = useState(mockTracks);
+  const [playlistTracks, setPlaylistTracks] = useState([]);
+  const [playlistName, setPlaylistName] = useState("My Playlist");
+  const [searchTerm, setsearchTerm] = useState("");
+
+  // Function to add a track to the playlist
+  const addTrack = (track) => {
+    setPlaylistTracks((tracks) => {
+      if (tracks.find((t) => t.id === track.id)) {
+        return tracks;
+      }
+
+      return [track, ...tracks];
+    });
+  };
+
+  // Handle Search
+  const handleSearch = (term) => {
+    console.log("Searching for:", term);
+
+    if (!term.trim()) {
+      setSearchResults(mockTracks);
+      return;
+    }
+
+    const filtered = mockTracks.filter(
+      (track) =>
+        track.name.toLowerCase().includes(term.toLowerCase()) ||
+        track.artist.toLowerCase().includes(term.toLowerCase()) ||
+        track.album.toLowerCase().includes(term.toLowerCase())
+    );
+
+    setSearchResults(filtered);
+  };
+
+  // Function to remove a track from the playlist
+  const removeTrack = (track) => {
+    setPlaylistTracks((tracks) => tracks.filter((t) => t.id !== track.id));
+  };
+
+  // Function to update playlist name
+  const updatePlaylistName = ({ target }) => {
+    setPlaylistName(target.value);
+  };
+
+  // Function to save playlist to Spotify
+  const savePlaylist = () => {
+    console.log("Playlist Name:", playlistName);
+    console.log("Playlist Tracks:", playlistTracks);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="App">
+      <h1 className="appTitle">
+        <span className="titleText">Jammming</span>
+      </h1>
+      <SearchBar onSearch={handleSearch} />
+      <div className="appContent">
+        <SearchResults searchResults={searchResults} onAdd={addTrack} />
+        <Playlist
+          playlistTracks={playlistTracks}
+          playlistName={playlistName}
+          onRemove={removeTrack}
+          onNameChange={updatePlaylistName}
+          onSave={savePlaylist}
+        />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;

@@ -1,0 +1,106 @@
+/* Playlist.module.css */
+.Playlist {
+  flex: 1;
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+
+  /* Glassmorphism effect */
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.05)
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.playlistNameInput {
+  width: 80%;
+  margin-bottom: 1.5rem;
+  padding: 0.8rem 1.2rem;
+
+  /* Glassmorphic input styling */
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+
+  /* Typography */
+  font-family: "SF Mono", "Monaco", "Cascadia Code", "Roboto Mono", monospace;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #ffffff;
+  text-align: center;
+
+  /* Effects */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+  transition: all 0.3s ease;
+}
+
+.playlistNameInput:focus {
+  outline: none;
+  border-color: rgba(123, 31, 162, 0.6);
+  box-shadow: 0 4px 20px rgba(123, 31, 162, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.playlistNameInput::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.saveButton {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 1rem 2rem;
+
+  /* Button styling */
+  background: linear-gradient(
+    135deg,
+    rgba(123, 31, 162, 0.8),
+    rgba(74, 20, 140, 0.9)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+
+  /* Typography */
+  font-family: "SF Mono", "Monaco", "Cascadia Code", "Roboto Mono", monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  /* Effects */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 6px 20px rgba(123, 31, 162, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.saveButton:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(123, 31, 162, 1),
+    rgba(74, 20, 140, 1)
+  );
+  box-shadow: 0 8px 25px rgba(123, 31, 162, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.saveButton:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 15px rgba(123, 31, 162, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
