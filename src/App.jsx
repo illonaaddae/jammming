@@ -9,7 +9,7 @@ function App() {
   const [searchResults, setSearchResults] = useState(mockTracks);
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [playlistName, setPlaylistName] = useState("My Playlist");
-  const [searchTerm, setsearchTerm] = useState("");
+  // const [searchTerm, setsearchTerm] = useState("");
 
   // Function to add a track to the playlist
   const addTrack = (track) => {

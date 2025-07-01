@@ -5,21 +5,21 @@ const mockTracks = [
     name: "Blinding Lights",
     artist: "The Weeknd",
     album: "After Hours",
-    albumCover: "https://i.scdn.co/image/ab67616d0000b273...",
+    albumCover: "/public/Codecademy-tasks.jpeg",
   },
   {
     id: "2",
     name: "Watermelon Sugar",
     artist: "Harry Styles",
     album: "Fine Line",
-    albumCover: "https://i.scdn.co/image/ab67616d0000b273...",
+    albumCover: "/public/Codecademy-tasks.jpeg",
   },
   {
     id: "3",
     name: "Levitating",
     artist: "Dua Lipa",
     album: "Future Nostalgia",
-    albumCover: "https://i.scdn.co/image/ab67616d0000b273...",
+    albumCover: "/public/Codecademy-tasks.jpeg",
   },
 ];
 

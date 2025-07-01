@@ -12,7 +12,11 @@ function Track({ track, onAdd, onRemove, isRemoval }) {
   return (
     <>
       <div className={styles.track}>
-        <div className={styles.albumCover}></div>
+        <img
+          className={styles.albumCover}
+          src={track.albumCover}
+          alt={track.name}
+        />
 
         <div className={styles.trackInfo}>
           <h2 className={styles.trackName}>{track.name}</h2>
