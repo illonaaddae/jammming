@@ -14,7 +14,44 @@ export async function getAccessToken() {
     body: `grant_type=client_credentials&client_id=${clientID}&client_secret=${clientSecret}`,
   });
 
-  const rest = await response.json();
-  console.log(rest);
-  //   return response.json();
+  const res = await response.json();
+  const tokenExpiry = Date.now() + res.expires_in;
+  console.log(tokenExpiry);
+  localStorage.setItem("token", JSON.stringify(res));
+  localStorage.setItem("expiry", JSON.stringify(tokenExpiry));
+
+  return res;
+}
+
+export function isTokenEpired() {
+  const currentTime = Date.now();
+  const tokenEpiriy = localStorage.getItem("expiriy") ?? 0;
+  if (currentTime > tokenEpiriy) {
+    localStorage.clear();
+    return true;
+  } else {
+    return false;
+  }
+}
+
+ export async function middleWare(path, method="GET") {
+    if(isTokenEpired()) {
+        const {
+            access_token,
+            token_type
+        } = getAccessToken();
+
+        try {
+            const response = await fetch(``)
+
+            
+        } catch (error) {
+            
+        }
+
+    }
+
+
+
+
 }
