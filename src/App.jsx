@@ -1,15 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SearchResults from "./components/SearchResults";
 import Playlist from "./components/Playlist";
 import mockTracks from "./utilis/mock-data";
 import "./App.css";
 import SearchBar from "./components/SearchBar";
+import { getAccessToken } from "./utilis/Spotify";
 
 function App() {
   const [searchResults, setSearchResults] = useState(mockTracks);
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [playlistName, setPlaylistName] = useState("My Playlist");
   // const [searchTerm, setsearchTerm] = useState("");
+
+  useEffect(() => {
+    getAccessToken();
+  }, []);
 
   // Function to add a track to the playlist
   const addTrack = (track) => {
