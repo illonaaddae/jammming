@@ -4,17 +4,12 @@ import Playlist from "./components/Playlist";
 import mockTracks from "./utilis/mock-data";
 import "./App.css";
 import SearchBar from "./components/SearchBar";
-import { getAccessToken } from "./utilis/Spotify";
+import { middleWare } from "./utilis/Spotify";
 
 function App() {
   const [searchResults, setSearchResults] = useState(mockTracks);
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [playlistName, setPlaylistName] = useState("My Playlist");
-  // const [searchTerm, setsearchTerm] = useState("");
-
-  useEffect(() => {
-    getAccessToken();
-  }, []);
 
   // Function to add a track to the playlist
   const addTrack = (track) => {
@@ -29,21 +24,27 @@ function App() {
 
   // Handle Search
   const handleSearch = (term) => {
-    console.log("Searching for:", term);
+    
+    const searchValue = term.trim().replace(" ", "%20");
 
-    if (!term.trim()) {
-      setSearchResults(mockTracks);
-      return;
-    }
-
-    const filtered = mockTracks.filter(
-      (track) =>
-        track.name.toLowerCase().includes(term.toLowerCase()) ||
-        track.artist.toLowerCase().includes(term.toLowerCase()) ||
-        track.album.toLowerCase().includes(term.toLowerCase())
+    console.log("searchValue:", searchValue);
+    middleWare(
+      `search?q=${searchValue}&type=album%2Cplaylist%2Ctrack%2Cartist&limit=10`
     );
 
-    setSearchResults(filtered);
+    // if (!term.trim()) {
+    //   setSearchResults(mockTracks);
+    //   return;
+    // }
+
+    // const filtered = mockTracks.filter(
+    //   (track) =>
+    //     track.name.toLowerCase().includes(term.toLowerCase()) ||
+    //     track.artist.toLowerCase().includes(term.toLowerCase()) ||
+    //     track.album.toLowerCase().includes(term.toLowerCase())
+    // );
+
+    // setSearchResults(filtered);
   };
 
   // Function to remove a track from the playlist

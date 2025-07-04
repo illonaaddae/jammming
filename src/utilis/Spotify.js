@@ -34,24 +34,42 @@ export function isTokenEpired() {
   }
 }
 
- export async function middleWare(path, method="GET") {
-    if(isTokenEpired()) {
-        const {
-            access_token,
-            token_type
-        } = getAccessToken();
+export async function middleWare(path, method = "GET") {
+  const spotifyUrl = import.meta.env.VITE_SPOTIFY_BASE_URL;
+  if (isTokenEpired()) {
+    const token = await getAccessToken();
+    console.log(token);
 
-        try {
-            const response = await fetch(``)
+    try {
+      if (!token) return;
+      const response = await fetch(`${spotifyUrl}/${path}`, {
+        method,
+        headers: {
+          Authorization: `${token.token_type} ${token.access_token}`,
+        },
+      });
 
-            
-        } catch (error) {
-            
-        }
-
+      const res = await response.json();
+      console.log(res);
+    } catch (error) {
+      console.error(error);
     }
-
-
-
-
+  }
+  // If fetching with new token fails, try with the token from localStorage
+  const token = JSON.parse(localStorage.getItem("token"));
+  console.log(token);
+  if (token) {
+    try {
+      const response = await fetch(`${spotifyUrl}/${path}`, {
+        method,
+        headers: {
+          Authorization: `${token.token_type} ${token.access_token}`,
+        },
+      });
+      const res = await response.json();
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
