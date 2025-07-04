@@ -15,8 +15,8 @@ export async function getAccessToken() {
   });
 
   const res = await response.json();
-  const tokenExpiry = Date.now() + res.expires_in;
-  console.log(tokenExpiry);
+  const tokenExpiry = Date.now() + res.expires_in * 1000;
+
   localStorage.setItem("token", JSON.stringify(res));
   localStorage.setItem("expiry", JSON.stringify(tokenExpiry));
 
@@ -25,7 +25,8 @@ export async function getAccessToken() {
 
 export function isTokenEpired() {
   const currentTime = Date.now();
-  const tokenEpiriy = localStorage.getItem("expiriy") ?? 0;
+  const tokenEpiriy = Number(localStorage.getItem("expiry") ?? 0);
+  console.log(currentTime, tokenEpiriy);
   if (currentTime > tokenEpiriy) {
     localStorage.clear();
     return true;
@@ -57,7 +58,7 @@ export async function middleWare(path, method = "GET") {
   }
   // If fetching with new token fails, try with the token from localStorage
   const token = JSON.parse(localStorage.getItem("token"));
-  console.log(token);
+
   if (token) {
     try {
       const response = await fetch(`${spotifyUrl}/${path}`, {
