@@ -1,26 +1,83 @@
-// curl -X POST "https://accounts.spotify.com/api/token" \
-//      -H "Content-Type: application/x-www-form-urlencoded" \
-//      -d "grant_type=client_credentials&client_id=your-client-id&client_secret=your-client-secret"
+const generateRandomString = (length) => {
+  const possible =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const values = crypto.getRandomValues(new Uint8Array(length));
+  return values.reduce((acc, x) => acc + possible[x % possible.length], "");
+};
+
+const codeVerifier = generateRandomString(64);
+console.log("codeVerifier:", codeVerifier);
+
+const sha256 = async (plain) => {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(plain);
+
+  console.log("plain:", plain);
+  const hash = await window.crypto.subtle.digest("SHA-256", data);
+  console.log("hash:", hash);
+  return hash;
+};
+
+const base64encode = (input) => {
+  return btoa(String.fromCharCode(...new Uint8Array(input)))
+    .replace(/=/g, "")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_");
+};
+
+const hashed = await sha256(codeVerifier);
+const codeChallenge = base64encode(hashed);
+
+const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
+const redirectUri = import.meta.env.VITE_REDIRECT_URL;
+
+export async function authorizeUser() {
+  const scope = "user-read-private user-read-email";
+  const authUrl = new URL("https://accounts.spotify.com/authorize");
+
+  // generated in the previous step
+  localStorage.setItem("code_verifier", codeVerifier);
+
+  const params = {
+    response_type: "code",
+    client_id: clientId,
+    scope,
+    code_challenge_method: "S256",
+    code_challenge: codeChallenge,
+    redirect_uri: redirectUri,
+  };
+
+  authUrl.search = new URLSearchParams(params).toString();
+  window.location.href = authUrl.toString();
+}
 
 export async function getAccessToken() {
-  const clientID = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
-  const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get("code");
 
-  const response = await fetch("https://accounts.spotify.com/api/token", {
+  // stored in the previous step
+  const codeVerifier = localStorage.getItem("code_verifier");
+
+  const url = "https://accounts.spotify.com/api/token";
+  const payload = {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: `grant_type=client_credentials&client_id=${clientID}&client_secret=${clientSecret}`,
-  });
+    body: new URLSearchParams({
+      client_id: clientId,
+      grant_type: "authorization_code",
+      code,
+      redirect_uri: redirectUri,
+      code_verifier: codeVerifier,
+    }),
+  };
 
-  const res = await response.json();
-  const tokenExpiry = Date.now() + res.expires_in * 1000;
+  const body = await fetch(url, payload);
+  const response = await body.json();
+  console.log(response);
 
-  localStorage.setItem("token", JSON.stringify(res));
-  localStorage.setItem("expiry", JSON.stringify(tokenExpiry));
-
-  return res;
+  localStorage.setItem("access_token", response.access_token);
 }
 
 export function isTokenEpired() {
