@@ -7,7 +7,7 @@ import SearchBar from "./components/SearchBar";
 import { middleWare } from "./utilis/Spotify";
 
 function App() {
-  const [searchResults, setSearchResults] = useState(mockTracks);
+  const [searchResults, setSearchResults] = useState([]);
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [playlistName, setPlaylistName] = useState("My Playlist");
 
@@ -23,14 +23,33 @@ function App() {
   };
 
   // Handle Search
-  const handleSearch = (term) => {
-    
-    const searchValue = term.trim().replace(" ", "%20");
+  const handleSearch = async (term) => {
+    const searchTerm = term.trim();
+    if (searchTerm.length < 2) return;
 
-    console.log("searchValue:", searchValue);
-    middleWare(
-      `search?q=${searchValue}&type=album%2Cplaylist%2Ctrack%2Cartist&limit=10`
+    const searchValue = searchTerm.replace(" ", "%20");
+
+    const { errorMsg, result } = await middleWare(
+      `search?q=${searchValue}&type=track&limit=50`
     );
+    console.log(errorMsg);
+    if (errorMsg || result.error) {
+      alert(errorMsg ?? result.error.message);
+      return;
+    }
+
+    // console.log(result);
+    const tracks = result.tracks.items.map((item) => {
+      return {
+        id: item.id,
+        name: item.name,
+        artist: item.artists[0].name,
+        album: item.album.name,
+        albumCover: item.album.images[0].url,
+      };
+    });
+    setSearchResults(tracks);
+    console.log(tracks);
 
     // if (!term.trim()) {
     //   setSearchResults(mockTracks);
