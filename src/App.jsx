@@ -5,7 +5,7 @@ import mockTracks from "./utilis/mock-data";
 import "./App.css";
 import SearchBar from "./components/SearchBar";
 import { middleWare } from "./utilis/Spotify";
-import { authorizeUser } from "./utilis/Spotify";
+import { authorizeAndAuthenticateUser } from "./utilis/Spotify";
 
 function App() {
   const [searchResults, setSearchResults] = useState([]);
@@ -13,7 +13,7 @@ function App() {
   const [playlistName, setPlaylistName] = useState("My Playlist");
 
   useEffect(() => {
-    authorizeUser();
+    authorizeAndAuthenticateUser();
   }, []);
 
   // Function to add a track to the playlist

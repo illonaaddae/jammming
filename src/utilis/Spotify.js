@@ -6,15 +6,13 @@ const generateRandomString = (length) => {
 };
 
 const codeVerifier = generateRandomString(64);
-console.log("codeVerifier:", codeVerifier);
 
 const sha256 = async (plain) => {
   const encoder = new TextEncoder();
   const data = encoder.encode(plain);
 
-  console.log("plain:", plain);
   const hash = await window.crypto.subtle.digest("SHA-256", data);
-  console.log("hash:", hash);
+
   return hash;
 };
 
@@ -31,7 +29,15 @@ const codeChallenge = base64encode(hashed);
 const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
 const redirectUri = import.meta.env.VITE_REDIRECT_URL;
 
+export async function authorizeAndAuthenticateUser() {
+
+  await getAccessToken();
+  authorizeUser();
+}
+
 export async function authorizeUser() {
+  if (!isTokenEpired()) return;
+
   const scope = "user-read-private user-read-email";
   const authUrl = new URL("https://accounts.spotify.com/authorize");
 
@@ -58,26 +64,41 @@ export async function getAccessToken() {
   // stored in the previous step
   const codeVerifier = localStorage.getItem("code_verifier");
 
-  const url = "https://accounts.spotify.com/api/token";
-  const payload = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: new URLSearchParams({
-      client_id: clientId,
-      grant_type: "authorization_code",
-      code,
-      redirect_uri: redirectUri,
-      code_verifier: codeVerifier,
-    }),
-  };
+  if (!code || !codeVerifier) {
+    return;
+  }
 
-  const body = await fetch(url, payload);
-  const response = await body.json();
-  console.log(response);
+  try {
+    const url = "https://accounts.spotify.com/api/token";
+    const payload = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        client_id: clientId,
+        grant_type: "authorization_code",
+        code,
+        redirect_uri: redirectUri,
+        code_verifier: codeVerifier,
+      }),
+    };
 
-  localStorage.setItem("access_token", response.access_token);
+    const body = await fetch(url, payload);
+    const response = await body.json();
+
+    if (response.access_token) {
+      localStorage.setItem("token", JSON.stringify(response));
+      const expiry = Date.now() + response.expires_in * 1000;
+      localStorage.setItem("expiry", expiry);
+    }
+
+    window.location.url = import.meta.env.VITE_SPOTIFY_BASE_URL;
+
+    return response;
+  } catch (error) {
+    console.error(error.message);
+  }
 }
 
 export function isTokenEpired() {
