@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import SearchResults from "./components/SearchResults";
 import Playlist from "./components/Playlist";
-import mockTracks from "./utilis/mock-data";
 import "./App.css";
 import SearchBar from "./components/SearchBar";
 import { middleWare } from "./utilis/Spotify";
@@ -86,6 +85,7 @@ function App() {
     console.log("Playlist Name:", playlistName);
     console.log("Playlist Tracks:", playlistTracks);
   };
+  
 
   return (
     <div className="App">
