@@ -30,7 +30,6 @@ const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
 const redirectUri = import.meta.env.VITE_REDIRECT_URL;
 
 export async function authorizeAndAuthenticateUser() {
-
   await getAccessToken();
   authorizeUser();
 }
@@ -93,7 +92,7 @@ export async function getAccessToken() {
       localStorage.setItem("expiry", expiry);
     }
 
-    window.location.url = import.meta.env.VITE_SPOTIFY_BASE_URL;
+    window.location.replace(import.meta.env.VITE_REDIRECT_URL);
 
     return response;
   } catch (error) {
