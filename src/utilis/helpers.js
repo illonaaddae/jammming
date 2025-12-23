@@ -1,3 +1,4 @@
+// Generate a random string for the code verifier
 export const generateRandomString = (length) => {
   const possible =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -5,17 +6,14 @@ export const generateRandomString = (length) => {
   return values.reduce((acc, x) => acc + possible[x % possible.length], "");
 };
 
-export const codeVerifier = generateRandomString(64);
-
+// SHA-256 hash function
 const sha256 = async (plain) => {
   const encoder = new TextEncoder();
   const data = encoder.encode(plain);
-
-  const hash = await window.crypto.subtle.digest("SHA-256", data);
-
-  return hash;
+  return window.crypto.subtle.digest("SHA-256", data);
 };
 
+// Base64 URL encode
 const base64encode = (input) => {
   return btoa(String.fromCharCode(...new Uint8Array(input)))
     .replace(/=/g, "")
@@ -23,7 +21,10 @@ const base64encode = (input) => {
     .replace(/\//g, "_");
 };
 
-const hashed = await sha256(codeVerifier);
-export const codeChallenge = base64encode(hashed);
-
-
+// Generate code verifier and challenge - now as async function
+export const generateCodeChallenge = async () => {
+  const verifier = generateRandomString(64);
+  const hashed = await sha256(verifier);
+  const challenge = base64encode(hashed);
+  return { verifier, challenge };
+};
