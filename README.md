@@ -51,7 +51,7 @@ Jammming is a React web application that connects to the Spotify API, allowing u
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 22.12 or later (supported LTS release)
 - npm or yarn
 - Spotify Developer Account ([Create one here](https://developer.spotify.com/dashboard))
 
@@ -67,7 +67,7 @@ Jammming is a React web application that connects to the Spotify API, allowing u
 2. **Install dependencies**
 
    ```bash
-   npm install
+   npm ci
    ```
 
 3. **Create environment variables**
@@ -76,7 +76,7 @@ Jammming is a React web application that connects to the Spotify API, allowing u
 
    ```env
    VITE_SPOTIFY_CLIENT_ID=your_spotify_client_id
-   VITE_REDIRECT_URL=http://localhost:3000/
+   VITE_REDIRECT_URL=http://127.0.0.1:3000/
    VITE_SPOTIFY_BASE_URL=https://api.spotify.com/v1
    ```
 
@@ -85,7 +85,7 @@ Jammming is a React web application that connects to the Spotify API, allowing u
    In your [Spotify Developer Dashboard](https://developer.spotify.com/dashboard):
 
    - Create a new app
-   - Add `http://localhost:3000/` to Redirect URIs
+   - Add `http://127.0.0.1:3000/` to Redirect URIs
    - Copy your Client ID to the `.env` file
 
 5. **Start the development server**
@@ -96,7 +96,7 @@ Jammming is a React web application that connects to the Spotify API, allowing u
 
 6. **Open your browser**
 
-   Navigate to `http://localhost:3000`
+   Navigate to `http://127.0.0.1:3000`
 
 ## 🌐 Deployment
 

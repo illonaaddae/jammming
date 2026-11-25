@@ -3,7 +3,8 @@ import SearchResults from "./components/SearchResults";
 import Playlist from "./components/Playlist";
 import "./App.css";
 import SearchBar from "./components/SearchBar";
-import { ToastContainer, useToast } from "./components/Toast";
+import { ToastContainer } from "./components/Toast";
+import { useToast } from "./components/useToast";
 import {
   initializeSpotify,
   searchTracks,
